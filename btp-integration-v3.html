@@ -399,15 +399,19 @@ select option{background:var(--bg3)}
 // ════════════════════════════════════════════════
 //  CONFIGURATION FIREBASE — À REMPLIR
 // ════════════════════════════════════════════════
-const FIREBASE_CONFIG = {
-  apiKey: "VOTRE_API_KEY",
-  authDomain: "VOTRE_PROJECT.firebaseapp.com",
-  databaseURL: "https://VOTRE_PROJECT-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "VOTRE_PROJECT",
-  storageBucket: "VOTRE_PROJECT.appspot.com",
-  messagingSenderId: "VOTRE_SENDER_ID",
-  appId: "VOTRE_APP_ID"
+const firebaseConfig = {
+  apiKey: "AIzaSyCDWYj9aLiT4Q2MOVxg9B7sJPQZJqoWRJw",
+  authDomain: "cie3-btp.firebaseapp.com",
+  databaseURL: "https://cie3-btp-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "cie3-btp",
+  storageBucket: "cie3-btp.firebasestorage.app",
+  messagingSenderId: "812992093362",
+  appId: "1:812992093362:web:5eb3f15e3517791068bdab"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 
 // ════════════════════════════════════════════════
 //  DONNÉES PAR DÉFAUT (first launch)
