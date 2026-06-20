@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTP Intégration · CIE3 ESIEE Paris</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="BTP%20Int%C3%A9gration%20%C2%B7%20CIE3%20ESIEE%20Paris_files/firebase-app-compat_hcnk.js"></script>
+<script src="BTP%20Int%C3%A9gration%20%C2%B7%20CIE3%20ESIEE%20Paris_files/firebase-database-compat_hcnk.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#111210;--bg2:#1A1A17;--bg3:#242420;--card:#1E1E1A;
   --border:#2E2E28;--border2:#3A3A32;
   --text:#F0EDE4;--text2:#A8A49A;--text3:#6B6860;
-  --orange:#E8621A;--orange-light:#F07A3A;--orange-dark:#B84D12;
+  --orange:#E8621A;--orange-light:#F07A3A;
   --orange-bg:#2A1A0E;--orange-bg2:#3A2210;
   --yellow:#F5C842;--yellow-bg:#2A2206;--yellow-border:#3A3006;
   --red:#D44444;--red-bg:#2A0E0E;--red-border:#5A2222;
@@ -30,6 +30,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .tab{padding:7px 16px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;white-space:nowrap}
 .tab.active{background:var(--orange);color:#fff;border-color:var(--orange)}
 .view{display:none}.view.active{display:block}
+/* Sous-onglets intégrateur */
+.subtabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0}
+.subtab{padding:7px 14px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;border:1px solid transparent;color:var(--text3);cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;margin-bottom:-1px}
+.subtab.active{background:var(--bg2);border-color:var(--border);border-bottom-color:var(--bg2);color:var(--text)}
+.subview{display:none}.subview.active{display:block}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .section-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
 .btn{padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:var(--bg3);color:var(--text);cursor:pointer;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:all .15s;font-family:var(--font)}
@@ -44,12 +49,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px}
 .card-faded{opacity:.45;filter:grayscale(.3)}
 .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:500;white-space:nowrap}
-.badge-pts{background:var(--orange-bg);color:var(--orange-light);border:1px solid var(--orange-bg2)}
-.badge-unique{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border)}
-.badge-enigme{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border)}
+.badge-pts{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.badge-unique{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.badge-enigme{background:transparent;color:var(--text2);border:1px solid var(--border2)}
 .badge-done{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
-.badge-penalty{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
-.badge-locked{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.badge-penalty{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.badge-locked{background:transparent;color:var(--text3);border:1px solid var(--border)}
 .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center}
@@ -106,7 +111,12 @@ select option{background:var(--bg3)}
 .defi-title{font-weight:500;font-size:14px}
 .defi-desc{font-size:13px;color:var(--text2);margin-top:3px}
 .show-all-row{text-align:center;margin:4px 0 10px}
-.loading-bar{text-align:center;padding:40px;color:var(--text2)}
+/* Classement show more */
+.show-more-row{text-align:center;margin:4px 0 10px}
+/* Admin section */
+.admin-section{background:var(--orange-bg);border:1px solid var(--orange-bg2);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px}
+.admin-section-title{font-size:11px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.delete-request-card{background:var(--red-bg);border:1px solid var(--red-border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -122,30 +132,38 @@ select option{background:var(--bg3)}
     </div>
   </div>
 
+  <!-- VUE INTÉGRÉ -->
   <div class="view active" id="view-integre">
-    <div id="user-switcher-row"></div>
+    <div id="user-switcher-row"><div class="user-select-row"><label>Je suis :</label><select onchange="state.currentUserId=this.value;localStorage.setItem('cie3_userId',this.value);render()" style="flex:1"><option value="p_1781851747052" selected="selected">Lucas MARTIN</option><option value="p_1781851729190">Agathe MAUGENDRE</option></select></div></div>
     <div class="rules-box">
       <h3>Règles du chantier</h3>
       <ul class="rules-list">
         <li><strong>Points</strong> : chaque défi rapporte un certain nombre de points. Les défis plus risqués ou créatifs en valent davantage.</li>
-        <li><strong>Premier arrivé ⚡</strong> : certains défis ne peuvent être remportés qu'une seule fois. Le premier intégré à les réussir empoche les points — après, ils sont verrouillés pour tout le monde.</li>
-        <li><strong>Énigmes ?</strong> : soumets ta réponse directement dans l'appli. Les intégrateurs valident ou refusent. Tant qu'une réponse est en attente, tu ne peux pas en soumettre une nouvelle.</li>
+        <li><strong>Premier arrivé</strong> : certains défis ne peuvent 
+être remportés qu'une seule fois. Le premier intégré à les réussir 
+empoche les points — après, ils sont verrouillés pour tout le monde.</li>
+        <li><strong>Énigmes</strong> : soumets ta réponse directement 
+dans l'appli. Les intégrateurs valident ou refusent. Tant qu'une réponse
+ est en attente, tu ne peux pas en soumettre une nouvelle.</li>
         <li><strong>Pénalités</strong> : une mauvaise réponse peut faire perdre des points selon le défi.</li>
         <li><strong>Classement</strong> : mis à jour en temps réel pour tout le monde.</li>
       </ul>
     </div>
     <div id="perso-section"></div>
-    <div class="stat-grid" id="stats-integre"></div>
+    <div class="stat-grid" id="stats-integre"><div class="stat-card"><div class="stat-val">2</div><div class="stat-lbl">Intégrés</div></div><div class="stat-card"><div class="stat-val">7</div><div class="stat-lbl">Défis</div></div><div class="stat-card"><div class="stat-val">0</div><div class="stat-lbl">Terminés</div></div></div>
     <div class="section-header">
-      <span class="section-title">Classement général</span>
+      <span class="section-title">Top 5</span>
       <button class="btn btn-sm btn-primary" onclick="openModal('modal-register')">+ M'inscrire</button>
     </div>
-    <div id="classement-list"></div>
+    <div id="classement-list"><div class="card" style="padding:11px 14px"><div class="score-row"><span class="rank-num gold">1er</span><div class="avatar" style="background:#2A1A0E;color:#E8621A">AM</div><div style="flex:1"><div class="score-name">Agathe MAUGENDRE</div><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div></div><div class="score-pts">37 pts</div></div></div><div class="card" style="padding:11px 14px"><div class="score-row"><span class="rank-num silver">2e</span><div class="avatar" style="background:#0E1A2A;color:#5A9ED4">LM</div><div style="flex:1"><div class="score-name">Lucas MARTIN</div><div class="progress-bar"><div class="progress-fill" style="width:32%"></div></div></div><div class="score-pts">12 pts</div></div></div></div>
+    <div class="show-more-row">
+      <button class="btn btn-sm" id="btn-show-classement" onclick="toggleClassement()" style="display:none">Voir tout le classement</button>
+    </div>
     <hr class="divider">
     <div class="section-header" style="margin-top:14px">
       <span class="section-title">Défis à faire</span>
     </div>
-    <div id="defis-integre-list"></div>
+    <div id="defis-integre-list"><div class="card"><div style="flex:1"><span class="defi-title">Chanter le chant du béton</span><div class="defi-desc">Improviser une chanson de 30 secondes dont chaque phrase mentionne un terme BTP.</div><div class="tag-row"><span class="badge badge-pts">+12 pts</span><span class="badge badge-penalty">-3 pénalité</span></div></div></div><div class="card"><div style="flex:1"><span class="defi-title">Construire une maquette</span><div class="defi-desc">Ériger une tour de 30 cm avec uniquement du matériel fourni (carton, ruban, paille).</div><div class="tag-row"><span class="badge badge-pts">+30 pts</span></div></div></div><div class="card"><div style="flex:1"><span class="defi-title">Énigme du plan cadastral</span><div class="defi-desc">Résous l'énigme pour décrocher les points.</div><div class="enigme-box"><p>Je suis creusé avant d'exister, porté avant d'être utilisé, utilisé dans l'obscurité. Qu'est-ce que je suis ?</p><div class="enigme-input-row"><input type="text" id="enigme-input-d3" placeholder="Ta réponse..."><button class="btn btn-sm btn-primary" onclick="soumettrereponse('d3')">Soumettre</button></div></div><div class="tag-row"><span class="badge badge-enigme">Énigme</span><span class="badge badge-pts">+25 pts</span><span class="badge badge-penalty">-10 pénalité</span></div></div></div><div class="card"><div style="flex:1"><span class="defi-title">Selfie en gilet fluor</span><div class="defi-desc">Prendre un selfie avec 5 intégrés portant tous un gilet fluorescent.</div><div class="tag-row"><span class="badge badge-pts">+10 pts</span></div></div></div><div class="card"><div style="flex:1"><span class="defi-title">Trouver le chef de chantier</span><div class="defi-desc">Retrouver un inté avec un casque jaune et lui faire signer un bon de commande.</div><div class="tag-row"><span class="badge badge-unique">Premier arrivé</span><span class="badge badge-pts">+20 pts</span></div></div></div><div class="card"><div style="flex:1"><span class="defi-title">Voler un plot de chantier</span><div class="defi-desc">Ramener un plot orange de moins de 30 cm sur la table principale.</div><div class="tag-row"><span class="badge badge-pts">+15 pts</span><span class="badge badge-penalty">-5 pénalité</span></div></div></div><div class="card"><div style="flex:1"><span class="defi-title">Voler une chausette à Adam</span><div class="defi-desc"></div><div class="tag-row"><span class="badge badge-pts">+15 pts</span></div></div></div></div>
     <div class="show-all-row">
       <button class="btn btn-sm" id="btn-show-all" onclick="toggleShowAll()" style="display:none">Afficher aussi les défis réussis</button>
     </div>
@@ -154,52 +172,102 @@ select option{background:var(--bg3)}
     <div class="section-header" style="margin-top:6px">
       <span class="section-title">Historique</span>
     </div>
-    <div id="historique-integre"></div>
+    <div id="historique-integre"><div class="histo-row histo-fail">MARTIN Lucas — Énigme du plan cadastral : mauvaise réponse, -10 pts<span class="histo-ts">10:04</span></div><div class="histo-row histo-info">MARTIN Lucas a soumis une réponse pour "Énigme du plan cadastral"<span class="histo-ts">10:03</span></div><div class="histo-row histo-ok">MAUGENDRE Agathe — Voler un plot de chantier : +15 pts<span class="histo-ts">10:03</span></div><div class="histo-row histo-ok">MARTIN Lucas — Chanter le chant du béton : +12 pts<span class="histo-ts">09:04</span></div><div class="histo-row histo-ok">MARTIN Lucas — Selfie en gilet fluor : +10 pts<span class="histo-ts">08:50</span></div><div class="histo-row histo-fail">MAUGENDRE Agathe — Chanter le chant du béton : mauvaise réponse, -3 pts<span class="histo-ts">08:49</span></div><div class="histo-row histo-ok">MAUGENDRE Agathe — Énigme du plan cadastral : +25 pts<span class="histo-ts">08:49</span></div><div class="histo-row histo-info">MARTIN Lucas a rejoint le chantier<span class="histo-ts">08:49</span></div><div class="histo-row histo-info">MAUGENDRE Agathe a soumis une réponse pour "Énigme du plan cadastral"<span class="histo-ts">08:48</span></div><div class="histo-row histo-info">MAUGENDRE Agathe a rejoint le chantier<span class="histo-ts">08:48</span></div></div>
   </div>
 
+  <!-- VUE INTÉGRATEUR -->
   <div class="view" id="view-integrateur">
-    <div class="section-header">
-      <span class="section-title">Gestion des défis</span>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-sm" onclick="openModal('modal-admin')">⚙ Admin</button>
+    <div class="subtabs">
+      <div class="subtab active" onclick="switchSubtab('defis')" id="subtab-defis">Défis</div>
+      <div class="subtab" onclick="switchSubtab('valider')" id="subtab-valider">Valider</div>
+      <div class="subtab" onclick="switchSubtab('admin')" id="subtab-admin">Admin</div>
+    </div>
+
+    <!-- SOUS-ONGLET DÉFIS -->
+    <div class="subview active" id="subview-defis">
+      <div class="section-header">
+        <span class="section-title">Gestion des défis</span>
         <button class="btn btn-sm btn-primary" onclick="openModal('modal-add-defi')">+ Nouveau défi</button>
       </div>
-    </div>
-    <div id="defis-intra-list"></div>
-    <hr class="divider">
-    <div class="section-header" style="margin-top:6px">
-      <span class="section-title">Réponses en attente de validation</span>
-    </div>
-    <div id="pending-list"></div>
-    <hr class="divider">
-    <div class="section-header" style="margin-top:6px">
-      <span class="section-title">Valider un défi manuellement</span>
-    </div>
-    <div class="card">
-      <div class="grid2">
-        <div class="form-group" style="margin:0"><label>Intégré</label><select id="val-participant"></select></div>
-        <div class="form-group" style="margin:0"><label>Défi</label><select id="val-defi"></select></div>
+      <div id="defis-intra-list"><div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">Chanter le chant du béton</span><span class="badge badge-pts">+12 pts</span><span class="badge badge-done">1 réussi</span></div><div class="defi-desc" style="margin-top:3px">Improviser une chanson de 30 secondes dont chaque phrase mentionne un terme BTP.</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock('d1')" title="Verrouiller">🔒</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi('d1')">✕</button></div></div></div><div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">Construire une maquette</span><span class="badge badge-pts">+30 pts</span></div><div class="defi-desc" style="margin-top:3px">Ériger une tour de 30 cm avec uniquement du matériel fourni (carton, ruban, paille).</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock('d2')" title="Verrouiller">🔒</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi('d2')">✕</button></div></div></div><div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">Énigme du plan cadastral</span><span class="badge badge-enigme">Énigme</span><span class="badge badge-pts">+25 pts</span><span class="badge badge-done">1 réussi</span></div><div class="defi-desc" style="margin-top:4px">Énigme : Je suis creusé avant d'exister, porté avant d'être utilisé, utilisé dans l'obscurité. Qu'est-ce que je suis ?</div><div class="defi-desc" style="margin-top:3px">Résous l'énigme pour décrocher les points.</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock('d3')" title="Verrouiller">🔒</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi('d3')">✕</button></div></div></div><div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">Selfie en gilet fluor</span><span class="badge badge-pts">+10 pts</span><span class="badge badge-done">1 réussi</span></div><div class="defi-desc" style="margin-top:3px">Prendre un selfie avec 5 intégrés portant tous un gilet fluorescent.</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock('d4')" title="Verrouiller">🔒</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi('d4')">✕</button></div></div></div><div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">Trouver le chef de chantier</span><span class="badge badge-unique">Premier arrivé</span><span class="badge badge-pts">+20 pts</span></div><div class="defi-desc" style="margin-top:3px">Retrouver un inté avec un casque jaune et lui faire signer un bon de commande.</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock('d5')" title="Verrouiller">🔒</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi('d5')">✕</button></div></div></div><div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">Voler un plot de chantier</span><span class="badge badge-pts">+15 pts</span><span class="badge badge-done">1 réussi</span></div><div class="defi-desc" style="margin-top:3px">Ramener un plot orange de moins de 30 cm sur la table principale.</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock('d6')" title="Verrouiller">🔒</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi('d6')">✕</button></div></div></div><div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">Voler une chausette à Adam</span><span class="badge badge-pts">+15 pts</span></div><div class="defi-desc" style="margin-top:3px"></div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock('d_1781851707388')" title="Verrouiller">🔒</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi('d_1781851707388')">✕</button></div></div></div></div>
+      <hr class="divider">
+      <div class="section-header" style="margin-top:6px">
+        <span class="section-title">Historique complet</span>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <button class="btn btn-success" style="flex:1" onclick="validerDefiManuel(true)">✓ Valider (+pts)</button>
-        <button class="btn btn-danger" style="flex:1" onclick="validerDefiManuel(false)">✗ Mauvaise réponse</button>
+      <div id="historique-intra"><div class="histo-row histo-fail">MARTIN Lucas — Énigme du plan cadastral : mauvaise réponse, -10 pts<span class="histo-ts">10:04</span></div><div class="histo-row histo-info">MARTIN Lucas a soumis une réponse pour "Énigme du plan cadastral"<span class="histo-ts">10:03</span></div><div class="histo-row histo-ok">MAUGENDRE Agathe — Voler un plot de chantier : +15 pts<span class="histo-ts">10:03</span></div><div class="histo-row histo-ok">MARTIN Lucas — Chanter le chant du béton : +12 pts<span class="histo-ts">09:04</span></div><div class="histo-row histo-ok">MARTIN Lucas — Selfie en gilet fluor : +10 pts<span class="histo-ts">08:50</span></div><div class="histo-row histo-fail">MAUGENDRE Agathe — Chanter le chant du béton : mauvaise réponse, -3 pts<span class="histo-ts">08:49</span></div><div class="histo-row histo-ok">MAUGENDRE Agathe — Énigme du plan cadastral : +25 pts<span class="histo-ts">08:49</span></div><div class="histo-row histo-info">MARTIN Lucas a rejoint le chantier<span class="histo-ts">08:49</span></div><div class="histo-row histo-info">MAUGENDRE Agathe a soumis une réponse pour "Énigme du plan cadastral"<span class="histo-ts">08:48</span></div><div class="histo-row histo-info">MAUGENDRE Agathe a rejoint le chantier<span class="histo-ts">08:48</span></div></div>
+    </div>
+
+    <!-- SOUS-ONGLET VALIDER -->
+    <div class="subview" id="subview-valider">
+      <div class="section-header">
+        <span class="section-title">Réponses d'énigmes en attente</span>
+      </div>
+      <div id="pending-list"><div class="empty">Aucune réponse en attente</div></div>
+      <hr class="divider">
+      <div class="section-header" style="margin-top:6px">
+        <span class="section-title">Valider un défi manuellement</span>
+      </div>
+      <div class="card">
+        <div class="form-group" style="margin-bottom:10px">
+          <label>Intégré</label>
+          <select id="val-participant" onchange="renderSelectDefis()"><option value="p_1781851747052" selected="selected">Lucas MARTIN (12 pts)</option><option value="p_1781851729190">Agathe MAUGENDRE (37 pts)</option></select>
+        </div>
+        <div class="form-group" style="margin-bottom:10px">
+          <label>Défi disponible</label>
+          <select id="val-defi"><option value="d2" selected="selected">Construire une maquette (+30)</option><option value="d3">Énigme du plan cadastral (+25)</option><option value="d5">Trouver le chef de chantier (+20)</option><option value="d6">Voler un plot de chantier (+15)</option><option value="d_1781851707388">Voler une chausette à Adam (+15)</option></select>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-success" style="flex:1" onclick="validerDefiManuel(true)">✓ Valider (+pts)</button>
+          <button class="btn btn-danger" style="flex:1" onclick="validerDefiManuel(false)">✗ Mauvaise réponse</button>
+        </div>
       </div>
     </div>
-    <hr class="divider">
-    <div class="section-header" style="margin-top:6px">
-      <span class="section-title">Historique complet</span>
+
+    <!-- SOUS-ONGLET ADMIN -->
+    <div class="subview" id="subview-admin">
+      <!-- Changer le code -->
+      <div class="admin-section">
+        <div class="admin-section-title">Code d'accès intégrateur</div>
+        <div class="form-group" style="margin-bottom:8px">
+          <label>Code actuel</label>
+          <div class="code-display" id="display-current-code-admin"></div>
+        </div>
+        <div class="form-group" style="margin-bottom:8px">
+          <label>Nouveau code</label>
+          <input type="text" id="new-code-input" placeholder="Nouveau code...">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="changeCode()" style="width:100%">Mettre à jour le code</button>
+      </div>
+
+      <!-- Gestion des intégrés -->
+      <div class="section-header" style="margin-top:4px">
+        <span class="section-title">Supprimer un intégré</span>
+      </div>
+      <div class="card" style="margin-bottom:10px">
+        <div class="form-group" style="margin-bottom:8px">
+          <label>Sélectionner l'intégré à supprimer</label>
+          <select id="del-participant-select"><option value="p_1781851747052" selected="selected">Lucas MARTIN</option><option value="p_1781851729190">Agathe MAUGENDRE</option></select>
+        </div>
+        <button class="btn btn-danger btn-sm" onclick="demanderSuppression()" style="width:100%">Demander la suppression</button>
+        <p style="font-size:12px;color:var(--text3);margin-top:8px">La demande sera soumise ci-dessous pour validation finale.</p>
+      </div>
+
+      <!-- Demandes de suppression en attente -->
+      <div class="section-header" style="margin-top:4px">
+        <span class="section-title">Demandes de suppression en attente</span>
+      </div>
+      <div id="delete-requests-list"><div class="empty">Aucune demande en attente</div></div>
     </div>
-    <div id="historique-intra"></div>
   </div>
 </div>
 
-<!-- MODALS -->
+<!-- MODAL INSCRIPTION -->
 <div class="modal-bg" id="modal-register">
   <div class="modal">
     <h3>Rejoindre le chantier</h3>
     <div class="grid2">
-      <div class="form-group"><label>Nom de famille</label><input type="text" id="reg-nom" placeholder="ex : MARTIN" style="text-transform:uppercase"></div>
       <div class="form-group"><label>Prénom</label><input type="text" id="reg-prenom" placeholder="ex : Lucas"></div>
+      <div class="form-group"><label>Nom de famille</label><input type="text" id="reg-nom" placeholder="ex : MARTIN" style="text-transform:uppercase"></div>
     </div>
     <div style="display:flex;gap:8px;margin-top:4px">
       <button class="btn" onclick="closeModal('modal-register')" style="flex:1">Annuler</button>
@@ -208,6 +276,7 @@ select option{background:var(--bg3)}
   </div>
 </div>
 
+<!-- MODAL CODE INTÉGRATEUR -->
 <div class="modal-bg" id="modal-code-check">
   <div class="modal" style="text-align:center">
     <h3>Accès intégrateur</h3>
@@ -216,34 +285,14 @@ select option{background:var(--bg3)}
       <input type="password" id="modal-code-input" placeholder="Code d'accès" style="text-align:center;letter-spacing:.12em" onkeydown="if(event.key==='Enter')checkModalCode()">
     </div>
     <p id="modal-code-error" style="color:var(--red);font-size:13px;margin-bottom:10px;display:none">Code incorrect.</p>
-    <div style="display:flex;gap:8px;margin-bottom:16px">
+    <div style="display:flex;gap:8px">
       <button class="btn" onclick="closeModal('modal-code-check');switchMode('integre')" style="flex:1">Annuler</button>
       <button class="btn btn-primary" onclick="checkModalCode()" style="flex:1">Accéder →</button>
     </div>
-    <hr style="border:none;border-top:1px solid var(--border);margin-bottom:16px">
-    <div style="background:var(--orange-bg);border:1px solid var(--orange-bg2);border-radius:var(--radius-sm);padding:12px;text-align:left">
-      <p style="font-size:12px;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em;font-weight:600">Vue admin — changer le code</p>
-      <div class="form-group" style="margin-bottom:8px"><label>Code actuel</label><input type="password" id="admin-current-code" placeholder="Code actuel"></div>
-      <div class="form-group" style="margin-bottom:8px"><label>Nouveau code</label><input type="text" id="admin-new-code" placeholder="Nouveau code..."></div>
-      <button class="btn btn-primary btn-sm" onclick="changeCodeFromLogin()" style="width:100%">Changer le code</button>
-      <p id="admin-code-error" style="color:var(--red);font-size:12px;margin-top:6px;display:none">Code actuel incorrect.</p>
-    </div>
   </div>
 </div>
 
-<div class="modal-bg" id="modal-admin">
-  <div class="modal">
-    <h3>⚙ Paramètres admin</h3>
-    <div class="form-group"><label>Code actuel</label><div class="code-display" id="display-current-code"></div></div>
-    <hr style="border:none;border-top:1px solid var(--border);margin:14px 0">
-    <div class="form-group"><label>Nouveau code</label><input type="text" id="new-code-input" placeholder="Nouveau code..."></div>
-    <div style="display:flex;gap:8px;margin-top:4px">
-      <button class="btn" onclick="closeModal('modal-admin')" style="flex:1">Fermer</button>
-      <button class="btn btn-primary" onclick="changeCode()" style="flex:1">✓ Mettre à jour</button>
-    </div>
-  </div>
-</div>
-
+<!-- MODAL AJOUTER DÉFI -->
 <div class="modal-bg" id="modal-add-defi">
   <div class="modal">
     <h3>Nouveau défi</h3>
@@ -256,7 +305,7 @@ select option{background:var(--bg3)}
     <div class="form-group">
       <label>Type</label>
       <select id="new-defi-type" onchange="document.getElementById('enigme-field').style.display=this.value==='enigme'?'block':'none'">
-        <option value="normal">Normal (plusieurs peuvent réussir)</option>
+        <option value="normal" selected="selected">Normal (plusieurs peuvent réussir)</option>
         <option value="unique">Premier arrivé, premier servi</option>
         <option value="enigme">Énigme (réponse à soumettre)</option>
       </select>
@@ -303,12 +352,15 @@ let state = {
   unlocked: false,
   currentUserId: localStorage.getItem('cie3_userId') || null,
   showDone: false,
+  showAllClassement: false,
   participants: {},
   defis: {},
   pending: {},
+  deleteRequests: {},
   historique: {}
 };
 
+// ── Firebase ──────────────────────────────────
 function initFirebase() {
   try {
     firebase.initializeApp(FIREBASE_CONFIG);
@@ -317,19 +369,14 @@ function initFirebase() {
     db.ref('/').on('value', snap => {
       const data = snap.val();
       if (!data || !data.defis) {
-        db.ref('/').set({
-          code: 'BTP2024',
-          defis: DEFAULT_DEFIS,
-          participants: {},
-          pending: {},
-          historique: {}
-        });
+        db.ref('/').set({ code:'BTP2024', defis:DEFAULT_DEFIS, participants:{}, pending:{}, deleteRequests:{}, historique:{} });
         state.defis = JSON.parse(JSON.stringify(DEFAULT_DEFIS));
       } else {
         state.code = data.code || 'BTP2024';
         state.participants = data.participants || {};
         state.defis = data.defis || {};
         state.pending = data.pending || {};
+        state.deleteRequests = data.deleteRequests || {};
         state.historique = data.historique || {};
       }
       render();
@@ -341,27 +388,22 @@ function initFirebase() {
   }
 }
 
-function dbSet(path, value) { if (firebaseOk && db) db.ref(path).set(value); }
-function dbUpdate(path, value) { if (firebaseOk && db) db.ref(path).update(value); }
+function dbSet(path, val) { if (firebaseOk && db) db.ref(path).set(val); }
+function dbUpdate(path, val) { if (firebaseOk && db) db.ref(path).update(val); }
 function dbRemove(path) { if (firebaseOk && db) db.ref(path).remove(); }
 
+// ── UI helpers ────────────────────────────────
 function notify(msg, err) {
   const n = document.getElementById('notif');
   n.textContent = msg;
   n.style.background = err ? '#3A1212' : '#0E2A1A';
   n.style.color = err ? '#D44444' : '#4A9975';
-  n.style.border = `1px solid ${err ? '#5A2222' : '#0E3020'}`;
+  n.style.border = 'Ipx solid ' + (err ? '#5A2222' : '#0E3020');
   n.classList.add('show');
   setTimeout(() => n.classList.remove('show'), 2800);
 }
 
-function openModal(id) {
-  if (id === 'modal-admin') {
-    document.getElementById('display-current-code').textContent = state.code;
-    document.getElementById('new-code-input').value = '';
-  }
-  document.getElementById(id).classList.add('open');
-}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-bg').forEach(m => {
   m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
@@ -375,13 +417,24 @@ function switchMode(mode) {
   render();
 }
 
+function switchSubtab(tab) {
+  document.querySelectorAll('.subtab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.subview').forEach(v => v.classList.remove('active'));
+  document.getElementById('subtab-' + tab).classList.add('active');
+  document.getElementById('subview-' + tab).classList.add('active');
+  if (tab === 'admin') {
+    const el = document.getElementById('display-current-code-admin');
+    if (el) el.textContent = state.code;
+    renderDeleteRequests();
+    renderDelParticipantSelect();
+  }
+  render();
+}
+
 function tryIntegrateur() {
   if (state.unlocked) { switchMode('integrateur'); return; }
   document.getElementById('modal-code-input').value = '';
   document.getElementById('modal-code-error').style.display = 'none';
-  document.getElementById('admin-new-code').value = '';
-  document.getElementById('admin-current-code').value = '';
-  document.getElementById('admin-code-error').style.display = 'none';
   openModal('modal-code-check');
 }
 
@@ -400,22 +453,9 @@ function changeCode() {
   if (!nc) { notify('Saisis un nouveau code !', true); return; }
   state.code = nc;
   dbSet('/code', nc);
-  document.getElementById('display-current-code').textContent = nc;
+  const el = document.getElementById('display-current-code-admin');
+  if (el) el.textContent = nc;
   notify('Code mis à jour : ' + nc);
-  closeModal('modal-admin');
-}
-
-function changeCodeFromLogin() {
-  const current = document.getElementById('admin-current-code').value.trim();
-  const nouveau = document.getElementById('admin-new-code').value.trim();
-  if (current !== state.code) { document.getElementById('admin-code-error').style.display = 'block'; return; }
-  if (!nouveau) { notify('Saisis un nouveau code !', true); return; }
-  state.code = nouveau;
-  dbSet('/code', nouveau);
-  document.getElementById('admin-code-error').style.display = 'none';
-  document.getElementById('admin-new-code').value = '';
-  document.getElementById('admin-current-code').value = '';
-  notify('Code mis à jour !');
 }
 
 function toggleShowAll() {
@@ -424,13 +464,20 @@ function toggleShowAll() {
   render();
 }
 
+function toggleClassement() {
+  state.showAllClassement = !state.showAllClassement;
+  document.getElementById('btn-show-classement').textContent = state.showAllClassement ? 'Réduire le classement' : 'Voir tout le classement';
+  renderClassement();
+}
+
+// ── Actions ───────────────────────────────────
 function inscrire() {
-  const nom = document.getElementById('reg-nom').value.trim().toUpperCase();
   const prenom = document.getElementById('reg-prenom').value.trim();
-  if (!nom || !prenom) { notify('Remplis nom et prénom !', true); return; }
+  const nom = document.getElementById('reg-nom').value.trim().toUpperCase();
+  if (!prenom || !nom) { notify('Remplis prénom et nom !', true); return; }
   const ci = Object.keys(state.participants).length % COULEURS.length;
   const id = 'p_' + Date.now();
-  const newP = { id, nom, prenom, pts: 0, color: ci };
+  const newP = { id, prenom, nom, pts: 0, color: ci };
   state.participants[id] = newP;
   dbSet('/participants/' + id, newP);
   state.currentUserId = id;
@@ -438,7 +485,7 @@ function inscrire() {
   closeModal('modal-register');
   document.getElementById('reg-prenom').value = '';
   document.getElementById('reg-nom').value = '';
-  addHisto(nom + ' ' + prenom + ' a rejoint le chantier', 'info');
+  addHisto(prenom + ' ' + nom + ' a rejoint le chantier', 'info');
   notify('Bienvenue sur le chantier, ' + prenom + ' !');
   render();
 }
@@ -493,7 +540,7 @@ function soumettrereponse(did) {
   dbSet('/pending/' + id, obj);
   inp.value = '';
   const p = state.participants[pid];
-  addHisto((p ? p.nom + ' ' + p.prenom : 'Quelqu\'un') + ' a soumis une réponse pour "' + d.nom + '"', 'info');
+  addHisto((p ? p.prenom + ' ' + p.nom : 'Quelqu\'un') + ' a soumis une réponse pour "' + d.nom + '"', 'info');
   notify('Réponse soumise ! En attente de validation.');
   render();
 }
@@ -517,13 +564,13 @@ function appliquerResultat(pid, did, succes) {
     if (d.type === 'unique' || d.type === 'enigme') d.locked = true;
     dbUpdate('/participants/' + pid, { pts: p.pts });
     dbUpdate('/defis/' + did, { done: d.done, locked: d.locked });
-    addHisto(p.nom + ' ' + p.prenom + ' — ' + d.nom + ' : +' + d.pts + ' pts', 'ok');
+    addHisto(p.prenom + ' ' + p.nom + ' — ' + d.nom + ' : +' + d.pts + ' pts', 'ok');
     notify('+' + d.pts + ' pts pour ' + p.prenom + ' !');
   } else {
     const pen = d.pen || 0;
     p.pts = Math.max(0, p.pts - pen);
     dbUpdate('/participants/' + pid, { pts: p.pts });
-    addHisto(p.nom + ' ' + p.prenom + ' — ' + d.nom + ' : mauvaise réponse, -' + pen + ' pts', 'fail');
+    addHisto(p.prenom + ' ' + p.nom + ' — ' + d.nom + ' : mauvaise réponse, -' + pen + ' pts', 'fail');
     notify('Mauvaise réponse : -' + pen + ' pts pour ' + p.prenom, true);
   }
   render();
@@ -545,6 +592,54 @@ function toggleLock(id) {
   render();
 }
 
+// ── Suppression intégré (via demande admin) ───
+function demanderSuppression() {
+  const sel = document.getElementById('del-participant-select');
+  const pid = sel.value;
+  if (!pid) { notify('Sélectionne un intégré', true); return; }
+  const p = state.participants[pid];
+  if (!p) return;
+  // Vérifier qu'une demande n'est pas déjà en cours pour cet intégré
+  const alreadyPending = Object.values(state.deleteRequests || {}).some(r => r.pid === pid);
+  if (alreadyPending) { notify('Une demande est déjà en cours pour ' + p.prenom + '.', true); return; }
+  const id = 'del_' + Date.now();
+  const obj = { id, pid, ts: Date.now() };
+  state.deleteRequests[id] = obj;
+  dbSet('/deleteRequests/' + id, obj);
+  notify('Demande de suppression soumise pour ' + p.prenom + ' ' + p.nom + '.');
+  renderDeleteRequests();
+}
+
+function confirmerSuppression(delId) {
+  const req = state.deleteRequests[delId];
+  if (!req) return;
+  const p = state.participants[req.pid];
+  const pid = req.pid;
+  // Supprimer la demande
+  delete state.deleteRequests[delId];
+  dbRemove('/deleteRequests/' + delId);
+  if (!p) return;
+  // Supprimer ses pending
+  Object.keys(state.pending || {}).forEach(key => {
+    if (state.pending[key].pid === pid) { delete state.pending[key]; dbRemove('/pending/' + key); }
+  });
+  addHisto(p.prenom + ' ' + p.nom + ' a été supprimé', 'info');
+  const name = p.prenom + ' ' + p.nom;
+  delete state.participants[pid];
+  dbRemove('/participants/' + pid);
+  if (state.currentUserId === pid) { state.currentUserId = null; localStorage.removeItem('cie3_userId'); }
+  notify(name + ' supprimé.');
+  render();
+}
+
+function annulerSuppression(delId) {
+  delete state.deleteRequests[delId];
+  dbRemove('/deleteRequests/' + delId);
+  notify('Demande annulée.');
+  renderDeleteRequests();
+  renderDelParticipantSelect();
+}
+
 function addHisto(txt, type) {
   const id = 'h_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
   const obj = { txt, type, ts: Date.now() };
@@ -552,9 +647,11 @@ function addHisto(txt, type) {
   dbSet('/historique/' + id, obj);
 }
 
+// ── Render helpers ────────────────────────────
 function sortedP() { return Object.values(state.participants || {}).sort((a,b) => b.pts - a.pts); }
 function sortedD() { return Object.values(state.defis || {}).sort((a,b) => a.nom.localeCompare(b.nom,'fr')); }
-function getInit(p) { return ((p.nom[0]||'')+(p.prenom[0]||'')).toUpperCase(); }
+function getInit(p) { return ((p.prenom[0]||'')+(p.nom[0]||'')).toUpperCase(); }
+function displayName(p) { return p.prenom + ' ' + p.nom; }
 
 function render() {
   renderUserSwitcher();
@@ -566,13 +663,16 @@ function render() {
   renderPending();
   renderSelects();
   renderHistorique();
+  renderDeleteRequests();
+  renderDelParticipantSelect();
 }
 
 function renderUserSwitcher() {
   const el = document.getElementById('user-switcher-row');
   const parts = sortedP();
   if (!parts.length) { el.innerHTML = ''; return; }
-  const opts = parts.map(p => '<option value="' + p.id + '"' + (p.id === state.currentUserId ? ' selected' : '') + '>' + p.nom + ' ' + p.prenom + '</option>').join('');
+  const sortedAlpha = [...parts].sort((a,b) => (a.nom+a.prenom).localeCompare(b.nom+b.prenom,'fr'));
+  const opts = sortedAlpha.map(p => '<option value="' + p.id + '"' + (p.id === state.currentUserId ? ' selected' : '') + '>' + displayName(p) + '</option>').join('');
   el.innerHTML = '<div class="user-select-row"><label>Je suis :</label><select onchange="state.currentUserId=this.value;localStorage.setItem(\'cie3_userId\',this.value);render()" style="flex:1">' + opts + '</select></div>';
 }
 
@@ -585,7 +685,7 @@ function renderPerso() {
   const defisFaits = Object.values(state.defis || {}).filter(d => d.done && d.done[p.id]).length;
   const defisTotal = Object.keys(state.defis || {}).length;
   const pct = defisTotal ? Math.round(defisFaits / defisTotal * 100) : 0;
-  el.innerHTML = '<div class="perso-header"><div class="perso-avatar" style="background:' + BG_COULEURS[p.color%8] + ';color:' + COULEURS[p.color%8] + '">' + getInit(p) + '</div><div style="flex:1"><div style="font-weight:600;font-size:16px">' + p.nom + ' ' + p.prenom + '</div><div class="perso-rank">' + rank + (rank===1?'er':'e') + ' sur ' + sorted.length + '</div><div class="perso-prog-label"><span>' + defisFaits + ' défi' + (defisFaits!==1?'s':'') + ' réussi' + (defisFaits!==1?'s':'') + '</span><span>' + pct + '%</span></div><div class="progress-bar" style="height:6px"><div class="progress-fill" style="width:' + pct + '%"></div></div></div><div class="perso-pts">' + p.pts + ' pts</div></div>';
+  el.innerHTML = '<div class="perso-header"><div class="perso-avatar" style="background:' + BG_COULEURS[p.color%8] + ';color:' + COULEURS[p.color%8] + '">' + getInit(p) + '</div><div style="flex:1"><div style="font-weight:600;font-size:16px">' + displayName(p) + '</div><div class="perso-rank">' + rank + (rank===1?'er':'e') + ' sur ' + sorted.length + '</div><div class="perso-prog-label"><span>' + defisFaits + ' défi' + (defisFaits!==1?'s':'') + ' réussi' + (defisFaits!==1?'s':'') + '</span><span>' + pct + '%</span></div><div class="progress-bar" style="height:6px"><div class="progress-fill" style="width:' + pct + '%"></div></div></div><div class="perso-pts">' + p.pts + ' pts</div></div>';
 }
 
 function renderStats() {
@@ -598,23 +698,28 @@ function renderClassement() {
   const sorted = sortedP();
   const max = sorted[0]?.pts || 1;
   const cl = document.getElementById('classement-list');
-  if (!sorted.length) { cl.innerHTML = '<div class="empty">Aucun intégré inscrit</div>'; return; }
-  cl.innerHTML = sorted.map((p, i) => {
+  const btnEl = document.getElementById('btn-show-classement');
+  if (!sorted.length) { cl.innerHTML = '<div class="empty">Aucun intégré inscrit</div>'; btnEl.style.display='none'; return; }
+  const visible = state.showAllClassement ? sorted : sorted.slice(0, 5);
+  cl.innerHTML = visible.map((p, i) => {
     const rc = i===0?'gold':i===1?'silver':i===2?'bronze':'';
     const medal = i===0?'1er':i===1?'2e':i===2?'3e':'#'+(i+1);
-    const defisFaits = Object.values(state.defis||{}).filter(d=>d.done&&d.done[p.id]).length;
     const isCurrent = p.id === state.currentUserId;
-    return '<div class="card" style="padding:11px 14px' + (isCurrent?';border-color:var(--orange)':'') + '"><div class="score-row"><span class="rank-num ' + rc + '">' + medal + '</span><div class="avatar" style="background:' + BG_COULEURS[p.color%8] + ';color:' + COULEURS[p.color%8] + '">' + getInit(p) + '</div><div style="flex:1"><div class="score-name">' + p.nom + ' ' + p.prenom + (isCurrent?' <span style="font-size:11px;color:var(--orange)">(moi)</span>':'') + '</div><div class="score-done">' + defisFaits + ' défi' + (defisFaits!==1?'s':'') + ' réussi' + (defisFaits!==1?'s':'') + '</div><div class="progress-bar"><div class="progress-fill" style="width:' + Math.round(p.pts/max*100) + '%"></div></div></div><div class="score-pts">' + p.pts + ' pts</div></div></div>';
+    return '<div class="card" style="padding:11px 14px' + (isCurrent?';border-color:var(--orange)':'') + '"><div class="score-row"><span class="rank-num ' + rc + '">' + medal + '</span><div class="avatar" style="background:' + BG_COULEURS[p.color%8] + ';color:' + COULEURS[p.color%8] + '">' + getInit(p) + '</div><div style="flex:1"><div class="score-name">' + displayName(p) + (isCurrent?' <span style="font-size:11px;color:var(--orange)">(moi)</span>':'') + '</div><div class="progress-bar"><div class="progress-fill" style="width:' + Math.round(p.pts/max*100) + '%"></div></div></div><div class="score-pts">' + p.pts + ' pts</div></div></div>';
   }).join('');
+  if (sorted.length > 5) {
+    btnEl.style.display = '';
+    btnEl.textContent = state.showAllClassement ? 'Réduire le classement' : 'Voir tout le classement (' + sorted.length + ')';
+  } else { btnEl.style.display = 'none'; }
 }
 
 function renderDefiCard(d, faded) {
   const pid = state.currentUserId;
   const pending = Object.values(state.pending || {});
   const hasPending = pending.some(r => r.pid === pid && r.did === d.id);
-  const typeBadge = d.type==='unique' ? '<span class="badge badge-unique">⚡ Premier arrivé</span>' : d.type==='enigme' ? '<span class="badge badge-enigme">? Énigme</span>' : '';
-  const lockBadge = d.locked ? '<span class="badge badge-locked">🔒 Verrouillé</span>' : '';
-  const doneBadge = (d.done && d.done[pid]) ? '<span class="badge badge-done">✓ Réussi</span>' : '';
+  const typeBadge = d.type==='unique' ? '<span class="badge badge-unique">Premier arrivé</span>' : d.type==='enigme' ? '<span class="badge badge-enigme">Énigme</span>' : '';
+  const lockBadge = d.locked ? '<span class="badge badge-locked">Verrouillé</span>' : '';
+  const doneBadge = (d.done && d.done[pid]) ? '<span class="badge badge-done">Réussi</span>' : '';
   let enigmeBlock = '';
   if (d.type === 'enigme' && !d.locked && !(d.done && d.done[pid])) {
     if (hasPending) {
@@ -624,7 +729,7 @@ function renderDefiCard(d, faded) {
       enigmeBlock = '<div class="enigme-box"><p>' + d.enigme + '</p><div class="enigme-input-row"><input type="text" id="enigme-input-' + d.id + '" placeholder="Ta réponse..."><button class="btn btn-sm btn-primary" onclick="soumettrereponse(\'' + d.id + '\')">Soumettre</button></div></div>';
     }
   }
-  return '<div class="card' + (faded?' card-faded':'') + '"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><span class="defi-title">' + d.nom + '</span><div class="defi-desc">' + d.desc + '</div>' + enigmeBlock + '<div class="tag-row">' + typeBadge + lockBadge + doneBadge + '<span class="badge badge-pts">+' + d.pts + ' pts</span>' + (d.pen?'<span class="badge badge-penalty">-'+d.pen+' pénalité</span>':'') + '</div></div></div></div>';
+  return '<div class="card' + (faded?' card-faded':'') + '"><div style="flex:1"><span class="defi-title">' + d.nom + '</span><div class="defi-desc">' + d.desc + '</div>' + enigmeBlock + '<div class="tag-row">' + typeBadge + lockBadge + doneBadge + '<span class="badge badge-pts">+' + d.pts + ' pts</span>' + (d.pen?'<span class="badge badge-penalty">-'+d.pen+' pénalité</span>':'') + '</div></div></div>';
 }
 
 function renderDefisIntegre() {
@@ -642,35 +747,72 @@ function renderDefisIntegre() {
 
 function renderDefisIntra() {
   const el = document.getElementById('defis-intra-list');
-  const defis = sortedD();
-  el.innerHTML = defis.map(d => {
-    const typeBadge = d.type==='unique' ? '<span class="badge badge-unique">⚡ Premier arrivé</span>' : d.type==='enigme' ? '<span class="badge badge-enigme">? Énigme</span>' : '';
+  if (!el) return;
+  el.innerHTML = sortedD().map(d => {
+    const typeBadge = d.type==='unique' ? '<span class="badge badge-unique">Premier arrivé</span>' : d.type==='enigme' ? '<span class="badge badge-enigme">Énigme</span>' : '';
     const doneCount = Object.keys(d.done||{}).length;
-    return '<div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">' + d.nom + '</span>' + typeBadge + '<span class="badge badge-pts">+' + d.pts + ' pts</span>' + (d.locked?'<span class="badge badge-locked">🔒 Verrouillé</span>':'') + (doneCount?'<span class="badge badge-done">'+doneCount+' réussi'+(doneCount>1?'s':'')+'</span>':'') + '</div>' + (d.type==='enigme'&&d.enigme?'<div class="defi-desc" style="margin-top:4px">Énigme : '+d.enigme+'</div>':'') + '<div class="defi-desc" style="margin-top:3px">' + d.desc + '</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px"><button class="btn btn-sm" onclick="toggleLock(\'' + d.id + '\')">' + (d.locked?'🔓':'🔒') + '</button><button class="btn btn-sm btn-danger" onclick="supprimerDefi(\'' + d.id + '\')">✕</button></div></div></div>';
+    // 🔒 = défi actuellement ouvert → cliquer verrouille ; 🔓 = défi verrouillé → cliquer déverrouille
+    const lockBtn = d.locked
+      ? '<button class="btn btn-sm" onclick="toggleLock(\'' + d.id + '\')" title="Déverrouiller">🔓</button>'
+      : '<button class="btn btn-sm" onclick="toggleLock(\'' + d.id + '\')" title="Verrouiller">🔒</button>';
+    return '<div class="card"><div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="defi-title">' + d.nom + '</span>' + typeBadge + '<span class="badge badge-pts">+' + d.pts + ' pts</span>' + (d.locked?'<span class="badge badge-locked">Verrouillé</span>':'') + (doneCount?'<span class="badge badge-done">'+doneCount+' réussi'+(doneCount>1?'s':'')+'</span>':'') + '</div>' + (d.type==='enigme'&&d.enigme?'<div class="defi-desc" style="margin-top:4px">Énigme : '+d.enigme+'</div>':'') + '<div class="defi-desc" style="margin-top:3px">' + d.desc + '</div></div><div style="display:flex;gap:6px;flex-shrink:0;margin-top:2px">' + lockBtn + '<button class="btn btn-sm btn-danger" onclick="supprimerDefi(\'' + d.id + '\')">✕</button></div></div></div>';
   }).join('') || '<div class="empty">Aucun défi</div>';
 }
 
 function renderPending() {
   const el = document.getElementById('pending-list');
+  if (!el) return;
   const pendings = Object.values(state.pending || {}).sort((a,b) => a.ts - b.ts);
   if (!pendings.length) { el.innerHTML = '<div class="empty">Aucune réponse en attente</div>'; return; }
   el.innerHTML = pendings.map(pnd => {
     const p = state.participants[pnd.pid];
     const d = state.defis[pnd.did];
     if (!p || !d) return '';
-    return '<div class="card"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><div style="font-weight:500;font-size:14px">' + p.nom + ' ' + p.prenom + '</div><div class="defi-desc">Défi : ' + d.nom + '</div><div style="margin-top:4px;font-size:13px">Réponse : <strong style="color:var(--yellow)">' + pnd.rep + '</strong></div></div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-success" onclick="validerPending(\'' + pnd.id + '\', true)">✓ Valider</button><button class="btn btn-sm btn-danger" onclick="validerPending(\'' + pnd.id + '\', false)">✕ Refuser</button></div></div></div>';
+    return '<div class="card"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><div style="font-weight:500;font-size:14px">' + displayName(p) + '</div><div class="defi-desc">Défi : ' + d.nom + '</div><div style="margin-top:4px;font-size:13px">Réponse : <strong style="color:var(--yellow)">' + pnd.rep + '</strong></div></div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-success" onclick="validerPending(\'' + pnd.id + '\', true)">✓ Valider</button><button class="btn btn-sm btn-danger" onclick="validerPending(\'' + pnd.id + '\', false)">✕ Refuser</button></div></div></div>';
   }).join('');
 }
 
 function renderSelects() {
   const sp = document.getElementById('val-participant');
-  const sd = document.getElementById('val-defi');
-  const pv = sp.value, dv = sd.value;
-  const sortedParts = [...sortedP()].sort((a,b) => (a.nom+a.prenom).localeCompare(b.nom+b.prenom,'fr'));
-  sp.innerHTML = sortedParts.map(p => '<option value="' + p.id + '">' + p.nom + ' ' + p.prenom + ' (' + p.pts + ' pts)</option>').join('') || '<option>Aucun intégré</option>';
-  sd.innerHTML = sortedD().map(d => '<option value="' + d.id + '">' + d.nom + ' (+' + d.pts + ')' + (d.locked?' — verrouillé':'') + '</option>').join('') || '<option>Aucun défi</option>';
+  if (!sp) return;
+  const pv = sp.value;
+  const sortedAlpha = [...sortedP()].sort((a,b) => (a.nom+a.prenom).localeCompare(b.nom+b.prenom,'fr'));
+  sp.innerHTML = sortedAlpha.map(p => '<option value="' + p.id + '">' + displayName(p) + ' (' + p.pts + ' pts)</option>').join('') || '<option value="">Aucun intégré</option>';
   if (pv) sp.value = pv;
+  renderSelectDefis();
+}
+
+function renderSelectDefis() {
+  const sp = document.getElementById('val-participant');
+  const sd = document.getElementById('val-defi');
+  if (!sp || !sd) return;
+  const pid = sp.value;
+  const dv = sd.value;
+  const available = sortedD().filter(d => !d.locked && !(pid && d.done && d.done[pid]));
+  sd.innerHTML = available.map(d => '<option value="' + d.id + '">' + d.nom + ' (+' + d.pts + ')</option>').join('') || '<option value="">Aucun défi disponible</option>';
   if (dv) sd.value = dv;
+}
+
+function renderDelParticipantSelect() {
+  const sel = document.getElementById('del-participant-select');
+  if (!sel) return;
+  const pendingPids = Object.values(state.deleteRequests || {}).map(r => r.pid);
+  const sortedAlpha = [...sortedP()].sort((a,b) => (a.nom+a.prenom).localeCompare(b.nom+b.prenom,'fr'));
+  sel.innerHTML = sortedAlpha.map(p => '<option value="' + p.id + '"' + (pendingPids.includes(p.id)?' disabled':'') + '>' + displayName(p) + (pendingPids.includes(p.id)?' (demande en cours)':'') + '</option>').join('') || '<option value="">Aucun intégré</option>';
+}
+
+function renderDeleteRequests() {
+  const el = document.getElementById('delete-requests-list');
+  if (!el) return;
+  const reqs = Object.values(state.deleteRequests || {}).sort((a,b) => a.ts - b.ts);
+  if (!reqs.length) { el.innerHTML = '<div class="empty">Aucune demande en attente</div>'; return; }
+  el.innerHTML = reqs.map(req => {
+    const p = state.participants[req.pid];
+    if (!p) return '';
+    const d = new Date(req.ts);
+    const ts = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+    return '<div class="delete-request-card"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><div style="font-weight:500;font-size:14px;color:var(--red)">' + displayName(p) + '</div><div style="font-size:12px;color:var(--text3)">Demandé à ' + ts + '</div></div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-danger" onclick="confirmerSuppression(\'' + req.id + '\')">Confirmer</button><button class="btn btn-sm" onclick="annulerSuppression(\'' + req.id + '\')">Annuler</button></div></div></div>';
+  }).join('');
 }
 
 function renderHistorique() {
@@ -686,5 +828,6 @@ function renderHistorique() {
 
 initFirebase();
 </script>
-</body>
-</html>
+
+
+</body></html>
